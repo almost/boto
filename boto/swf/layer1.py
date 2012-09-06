@@ -104,7 +104,7 @@ class Layer1(AWSAuthConnection):
             return False
         return False
 
-    def make_request(self, action, body='', object_hook=None):
+    def make_request(self, action, body='', object_hook=None, long_poll=False):
         """
         :raises: ``SWFResponseError`` if response status is not 200.
         """
@@ -115,8 +115,22 @@ class Layer1(AWSAuthConnection):
                    'Content-Length': str(len(body))}
         http_request = self.build_base_http_request('POST', '/', '/',
                                                     {}, headers, body, None)
-        response = self._mexe(http_request, sender=None,
-                              override_num_retries=10)
+        def sender(http_conn, method, path, data, headers):
+            previous_timeout = http_conn.sock.gettimeout()
+            http_conn.sock.settimeout(70)
+            try:
+                http_conn.request(method, path, body, headers)
+                return http_conn.getresponse()
+            finally:
+                http_conn.sock.settimeout(previous_timeout)
+        # For the poll_* requests we want a timeout of 70 seconds and
+        # not retries
+        if long_poll:
+            response = self._mexe(http_request, sender=sender,
+                                  override_num_retries=0)
+        else:
+            response = self._mexe(http_request, sender=None,
+                                  override_num_retries=10)
         response_body = response.read()
         boto.log.debug(response_body)
         if response.status == 200:
@@ -165,7 +179,7 @@ class Layer1(AWSAuthConnection):
         if identity:
             data['identity'] = identity
         json_input = json.dumps(data)
-        return self.make_request('PollForActivityTask', json_input)
+        return self.make_request('PollForActivityTask', json_input, long_poll=True)
 
     def respond_activity_task_completed(self, task_token, result=None):
         """
@@ -318,7 +332,7 @@ class Layer1(AWSAuthConnection):
         if reverse_order:
             data['reverseOrder'] = 'true'
         json_input = json.dumps(data)
-        return self.make_request('PollForDecisionTask', json_input)
+        return self.make_request('PollForDecisionTask', json_input, long_poll=True)
 
     def respond_decision_task_completed(self, task_token,
                                         decisions=None,

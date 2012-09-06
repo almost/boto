@@ -40,5 +40,8 @@ class SWFWorkflowExecutionAlreadyStartedError(SWFResponseError):
     in the specified domain.
     """
 
-
-
+class SWFActivityCancelRequestedError(Exception):
+    """
+    Raised when the response to a heartbeat includes a request to cancel.
+    """
+    pass
