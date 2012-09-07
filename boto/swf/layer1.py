@@ -116,6 +116,10 @@ class Layer1(AWSAuthConnection):
         http_request = self.build_base_http_request('POST', '/', '/',
                                                     {}, headers, body, None)
         def sender(http_conn, method, path, data, headers):
+            # Is there a better way of switching the timeout of a http
+            # connection for just one request?
+            if http_conn.sock is None:
+                http_conn.connect()
             previous_timeout = http_conn.sock.gettimeout()
             http_conn.sock.settimeout(70)
             try:
