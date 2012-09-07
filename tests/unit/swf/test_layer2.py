@@ -152,9 +152,12 @@ class TestSWFDomain(SWFLayer2Base):
         
 class TestSWFActivityTask(SWFLayer2Base):
     # TODO
+    pass
     
 class TestSWFDecisionTask(SWFLayer2Base):
     # TODO
+    pass
 
 class TestSWFHistoryEvent(SWFLayer2Base):
     # TODO
+    pass
