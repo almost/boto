@@ -23,7 +23,7 @@
 #
 
 from boto.ec2.regioninfo import RegionInfo
-import boto.swf.layer1
+import boto.swf.layer2
 
 def regions():
     """
@@ -32,10 +32,9 @@ def regions():
     :rtype: list
     :return: A list of :class:`boto.regioninfo.RegionInfo`
     """
-    import boto.dynamodb.layer2
     return [RegionInfo(name='us-east-1',
                        endpoint='swf.us-east-1.amazonaws.com',
-                       connection_cls=boto.swf.layer1.Layer1),
+                       connection_cls=boto.swf.layer2.Layer2),
             ]
 
 def connect_to_region(region_name, **kw_params):

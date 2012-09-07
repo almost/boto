@@ -574,11 +574,11 @@ def connect_swf(aws_access_key_id=None,
     :type aws_secret_access_key: string
     :param aws_secret_access_key: Your AWS Secret Access Key
 
-    :rtype: :class:`boto.swf.layer1.Layer1`
-    :return: A connection to the Layer1 interface for SWF.
+    :rtype: :class:`boto.swf.layer1.Layer2`
+    :return: A connection to the Layer2 interface for SWF.
     """
-    from boto.swf.layer1 import Layer1
-    return Layer1(aws_access_key_id, aws_secret_access_key, **kwargs)
+    from boto.swf.layer2 import Layer2
+    return Layer2(aws_access_key_id, aws_secret_access_key, **kwargs)
 
 
 def connect_cloudsearch(aws_access_key_id=None,
