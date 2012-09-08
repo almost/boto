@@ -32,9 +32,9 @@ class Domain(object):
     def __init__(self, layer1, data):
         self.layer1 = layer1
         self.name = data["domainInfo"]["name"]
-        self.description = data["domainInfo"]["description"]
+        self.description = data["domainInfo"].get("description", None)
         self.status = data["domainInfo"]["status"]
-        self.execution_retention_period_in_days = int(data["configuration"]["workflowExecutionRetentionPeriod"])
+        self.execution_retention_period_in_days = int(data["configuration"]["workflowExecutionRetentionPeriodInDays"])
 
     def poll_for_decision_task(self, task_list, identity=None, next_page_token=None, reverse_order=None):
         """

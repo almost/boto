@@ -1,5 +1,9 @@
 FIXTURE_DOMAIN = {
-  "configuration": {"workflowExecutionRetentionPeriod": "60"},
+  # In the examples on the Glacier API docs it lists this param as
+  # workflowExecutionRetentionPeriod but in the rest of the docs, and
+  # in the live system itself, it's
+  # workflowExecutionRetentionPeriodInDays
+  "configuration": {"workflowExecutionRetentionPeriodInDays": "60"},
   "domainInfo": {
     "description": "music",
     "name": "867530901",
