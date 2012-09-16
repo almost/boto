@@ -75,7 +75,7 @@ class Job(object):
            multiple of 1MB.
         """
         try:
-            response = self.get_output((chunk_number*chunk_size, (chunk_number*(chunk_number+1))-1))
+            response = self.get_output((chunk_number*chunk_size, (chunk_size*(chunk_number+1))-1))
         except UnexpectedHTTPResponseError, e:
             if e.status == 400 and e.code == "InvalidParameterValueException":
                 # This just means that we specified a range beyond the

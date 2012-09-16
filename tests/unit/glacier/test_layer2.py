@@ -26,7 +26,7 @@ try:
 except ImportError:
     import unittest
 import httplib
-from mock import Mock
+from mock import Mock, MagicMock
 
 from boto.glacier.layer1 import Layer1
 from boto.glacier.layer2 import Layer2
@@ -144,6 +144,12 @@ class TestJob(GlacierLayer2Base):
         
         data = self.job.get_output_chunk(1)
         assert data == "A" * (1024*1024*4)
+
+    def test_get_output_chunk_range(self):
+        self.job.get_output = MagicMock()
+        self.job.get_output.return_value = MockGlacierResponse("x", {"TreeHash":"x"})
+        self.assertRaises(HashesDoNotMatchError, self.job.get_output_chunk, 1)
+        self.job.get_output.assert_called_with((4194304, 8388607))
 
     def test_get_output_chunk_bad_hash(self):
         response = MockGlacierResponse(

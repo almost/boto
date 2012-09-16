@@ -25,6 +25,7 @@ import json
 import time
 from .activity_type import ActivityType
 from . import exceptions
+from boto.swf.exceptions import SWFResponseError
 
 class ActivityTask(object):
     """
